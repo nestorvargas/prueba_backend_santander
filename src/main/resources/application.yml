@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: prueba_tecnica_santander_backend
+  datasource:
+    url: jdbc:postgresql://localhost:5437/base
+    username: base
+    password: base
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration

@@ -29,7 +29,7 @@ public record DetalleTarjetaResponse (
                 card.getStatus(),
                 Objects.toString(card.getBlockedAt(),""),
                 Objects.toString(card.getBlockedReason(),""),
-                card.getEspiresAt(),
+                card.getExpiresAt(),
                 card.getBalance(),
                 card.getCurrency());
     }

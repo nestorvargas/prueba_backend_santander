@@ -17,6 +17,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
+import com.santander.base.exception.TransaccionInvalidaException;
+
 @Entity
 @Table (name="card")
 public class Card {
@@ -25,12 +27,12 @@ public class Card {
         private static final int ANIOS_VIGENCIA = 3;
 
         @Id
-        private UUID CardId;
+        private UUID cardId;
 
-        @Column(nullable = false, Unique = true, lenght = 16)
+        @Column(nullable = false, unique = true, length = 16)
         private String cardNumber;
 
-        @ManyToOne(fetch = FechType.LAZY, optional = false)
+        @ManyToOne(fetch = FetchType.LAZY, optional = false)
         @JoinColumn(name = "product_id", nullable = false)
         private Product product;
 
@@ -41,7 +43,7 @@ public class Card {
         private LocalDate issuedAt;
 
         @Column(nullable = false)
-        private LocalDate espiresAt;
+        private LocalDate expiresAt;
 
         @Enumerated(EnumType.STRING)
         @Column(nullable = false, length = 10)
@@ -57,6 +59,9 @@ public class Card {
 
         @Column (nullable = false, length = 3)
         private String currency;
+
+        @Version
+        private Long version;
 
 
         public static Card emitir(Product product, String holderName, String cardNumber, LocalDate fechaEmision){
@@ -82,7 +87,7 @@ public class Card {
 
         public void activar(){
             if(status == CardStatus.BLOCKED){
-                throw new TransaccionInvalidaEXception("La tarjeta" + CardId +" esta bloqueda y no se puede activar");
+                throw new TransaccionInvalidaException("La tarjeta " + cardId + " está bloqueada y no se puede activar");
             }
             status = CardStatus.ACTIVE;
         }
@@ -101,7 +106,7 @@ public class Card {
 
 
         public UUID getCardId(){
-         return CardId;
+         return cardId;
         }
 
         public String getCardNumber() {
@@ -120,8 +125,8 @@ public class Card {
             return issuedAt;
         }
 
-        public LocalDate getEspiresAt() {
-            return espiresAt;
+        public LocalDate getExpiresAt() {
+            return expiresAt;
         }
 
         public CardStatus getStatus() {
